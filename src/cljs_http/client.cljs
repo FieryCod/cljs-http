@@ -83,6 +83,7 @@
 (defn decode-body
   "Decocde the :body of `response` with `decode-fn` if the content type matches."
   [response decode-fn content-type request-method]
+  (println "DECODING response" response)
   (if (and (not= :head request-method)
            (not= 204 (:status response))
            (re-find (re-pattern (str "(?i)" (escape-special content-type)))

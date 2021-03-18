@@ -61,13 +61,15 @@
 (defn json-decode
   "JSON decode an object from `s`."
   [s]
+  (println "json-decode" s " " (type s))
   (let [v (if-not (clojure.string/blank? s) (js/JSON.parse s))]
     (when (some? v)
       (js->clj v :keywordize-keys true))))
 
 (defn json-encode
   "JSON encode `x` into a String."
-  [x] (js/JSON.stringify (clj->js x)))
+  [x]
+  (js/JSON.stringify (clj->js x)))
 
 (defn parse-headers [headers]
   (reduce
