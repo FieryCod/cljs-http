@@ -5,6 +5,7 @@
             [cljs.core.async :as async :refer [<! chan close! put!]]
             [cljs.reader :refer [read-string]]
             [clojure.string :refer [blank? join split]]
+            [cljs.pprint :as pprint]
             [goog.Uri :as uri]
             [no.en.core :refer [url-encode url-decode]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
@@ -83,7 +84,8 @@
 (defn decode-body
   "Decocde the :body of `response` with `decode-fn` if the content type matches."
   [response decode-fn content-type request-method]
-  (println "DECODING response" response)
+  (println "DECODE_BODY")
+  (pprint/pprint response)
   (if (and (not= :head request-method)
            (not= 204 (:status response))
            (re-find (re-pattern (str "(?i)" (escape-special content-type)))
@@ -186,6 +188,8 @@
   "Decode application/json responses."
   [client]
   (fn [request]
+    (println "WRAP_JSON_RESPONSE")
+    (pprint/pprint request)
     (-> #(decode-body % util/json-decode "application/json" (:request-method request))
         (async/map [(client request)]))))
 
